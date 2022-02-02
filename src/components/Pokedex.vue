@@ -27,6 +27,15 @@
 	<main v-else class="loading-image">
 		<img :src="loadingImage" alt="Loading gif" />
 	</main>
+
+	<div class="pagination-buttons">
+		<button @click="loadPrev()" v-if="showPrevButton" class="btn">
+			<i class="fas fa-caret-left"></i>
+		</button>
+		<button @click="loadNext()" v-if="showNextButton" class="btn">
+			<i class="fas fa-caret-right"></i>
+		</button>
+	</div>
 </template>
 
 <script>
@@ -35,33 +44,57 @@
 		data() {
 			return {
 				pokemons: [],
+				url: "https://pokeapi.co/api/v2/pokemon/?limit=5",
 				imageUrl:
 					"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/",
 				loading: true,
 				loadingImage: require("../assets/loading.gif"),
+				showPrevButton: false,
+				showNextButton: false,
+				nextUrl: "",
+				prevUrl: "",
 				errorMessage: "",
 			};
 		},
 		methods: {
 			async fetchPokemons() {
-				const res = await fetch(
-					"https://pokeapi.co/api/v2/pokemon/?limit=5"
-				);
+				const res = await fetch(this.url);
 				if (!res.ok) {
-					this.errorMessage =
-						"Something went wrong with the server. Try again later";
+					this.errorMessage = `Something went wrong with the server: ${res.status} ${res.statusText}. Try again later`;
 					this.loading = false;
 					return;
 				}
 				const data = await res.json();
-				return data.results;
+				this.showPrevButton = false;
+				this.showNextButton = false;
+				if (data.next) {
+					this.showNextButton = true;
+					this.nextUrl = data.next;
+				}
+				if (data.previous) {
+					this.showPrevButton = true;
+					this.prevUrl = data.previous;
+				}
+				this.pokemons = data.results;
+				this.areTherePokemons();
+				this.loading = false;
+			},
+			loadNext() {
+				this.url = this.nextUrl;
+				this.fetchPokemons();
+			},
+			loadPrev() {
+				this.url = this.prevUrl;
+				this.fetchPokemons();
+			},
+			areTherePokemons() {
+				if (this.pokemons.length === 0) {
+					this.errorMessage = "There are no pokemons to show.";
+				}
 			},
 		},
-		async created() {
-			this.pokemons = await this.fetchPokemons();
-			this.pokemons.length === 0 &&
-				(this.errorMessage = "There are no pokemons to show.");
-			this.loading = false;
+		created() {
+			this.fetchPokemons();
 		},
 	};
 </script>
@@ -102,5 +135,27 @@
 	}
 	article:hover {
 		background-color: lightyellow;
+	}
+	.pagination-buttons {
+		display: flex;
+		justify-content: space-around;
+		margin-top: 2rem;
+	}
+	.pagination-buttons .btn {
+		padding: 0.2rem 1rem;
+		background-color: black;
+		color: white;
+		border-radius: 5px;
+		border: none;
+		box-shadow: 0 0.2em rgb(107, 107, 107);
+		cursor: pointer;
+	}
+	.pagination-buttons .btn:active {
+		box-shadow: none;
+		position: relative;
+		top: 0.2em;
+	}
+	.fas {
+		font-size: 1.5rem;
 	}
 </style>

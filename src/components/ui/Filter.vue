@@ -1,6 +1,11 @@
 <template>
 	<div>
-		<input class="filter" type="text" placeholder="Write a pokemon name" />
+		<input
+			class="filter"
+			type="text"
+			placeholder="Search a pokemon"
+			autocomplete="off"
+		/>
 	</div>
 </template>
 
