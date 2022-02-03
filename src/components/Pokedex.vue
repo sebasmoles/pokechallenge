@@ -3,7 +3,11 @@
 
 	<main v-if="!loading" class="list">
 		<!-- Pokemon cardboxes -->
-		<article v-for="(pokemon, index) in pokemons" :key="index">
+		<article
+			v-for="(pokemon, index) in pokemons"
+			:key="index"
+			@click="$router.push('about')"
+		>
 			<img
 				:src="
 					imageUrl +
@@ -122,7 +126,7 @@
 	}
 	article {
 		width: 150px;
-		height: 150px;
+		height: 160px;
 		background-color: white;
 		border: solid 1px rgb(248, 248, 248);
 		border-radius: 5px;
@@ -132,9 +136,10 @@
 		text-transform: capitalize;
 		text-align: center;
 		box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1), 0 5px 5px rgba(0, 0, 0, 0.1);
+		overflow: hidden;
 	}
 	article:hover {
-		background-color: lightyellow;
+		background-color: rgb(251, 251, 180);
 	}
 	.pagination-buttons {
 		display: flex;

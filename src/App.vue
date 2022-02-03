@@ -1,7 +1,7 @@
 <template>
 	<div class="container">
 		<Header />
-		<Filter />
+		<Filter v-show="!isHidden" />
 		<router-view />
 	</div>
 </template>
@@ -15,6 +15,19 @@
 			Header,
 			Filter,
 		},
+		data() {
+			return {
+				isHidden: false,
+			};
+		},
+		watch: {
+			$route: function () {
+				// Check if given route is true, if so then hide filter component
+				this.$route.path === "/about"
+					? (this.isHidden = true)
+					: (this.isHidden = false);
+			},
+		},
 	};
 </script>
 
@@ -25,8 +38,11 @@
 		padding: 0;
 	}
 	body {
-		background-color: #ff3c3c;
-		font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+		background-image: linear-gradient(rgb(255, 0, 0), white);
+		font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+			Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+		font-size: 1rem;
+		height: 100vh;
 	}
 	.container {
 		max-width: 500px;

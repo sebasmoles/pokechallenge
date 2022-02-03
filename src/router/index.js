@@ -7,6 +7,13 @@ const routes = [
 		name: "Home",
 		component: Home,
 	},
+	{
+		path: "/about",
+		name: "About",
+		// Lazy load
+		component: () =>
+			import(/* webpackChunkName: "about" */ "../views/About.vue"),
+	},
 ];
 
 const router = createRouter({
