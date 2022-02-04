@@ -1,5 +1,5 @@
 <template>
-	<Pokemon />
+	<Pokemon :key="$route.params.name" />
 </template>
 
 <script>

@@ -20,6 +20,5 @@
 	.logo {
 		width: 15.625rem;
 		height: 5.6875rem;
-		margin-top: 2rem;
 	}
 </style>

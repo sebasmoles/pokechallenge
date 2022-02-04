@@ -6,7 +6,7 @@
 		<article
 			v-for="(pokemon, index) in pokemons"
 			:key="index"
-			@click="$router.push('about')"
+			@click="$router.push({ path: `/about/${pokemon.name}` })"
 		>
 			<img
 				:src="
@@ -65,8 +65,7 @@
 				const res = await fetch(this.url);
 				if (!res.ok) {
 					this.errorMessage = `Something went wrong with the server: ${res.status} ${res.statusText}. Try again later`;
-					this.loading = false;
-					return;
+					throw new Error(this.errorMessage);
 				}
 				const data = await res.json();
 				this.showPrevButton = false;
@@ -98,7 +97,12 @@
 			},
 		},
 		created() {
-			this.fetchPokemons();
+			try {
+				this.fetchPokemons();
+			} catch (e) {
+				console.error(e);
+				return;
+			}
 		},
 	};
 </script>
@@ -107,7 +111,7 @@
 	.error-message {
 		display: block;
 		margin-top: 2rem;
-		color: white;
+		color: black;
 	}
 	.loading-image {
 		display: flex;
@@ -128,7 +132,7 @@
 		width: 150px;
 		height: 160px;
 		background-color: white;
-		border: solid 1px rgb(248, 248, 248);
+		border: solid 1px black;
 		border-radius: 5px;
 		padding: 1rem;
 		cursor: pointer;
