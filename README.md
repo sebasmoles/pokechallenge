@@ -1,29 +1,28 @@
 # Pokechallenge
 
-## Project setup
+-   A simple pokedex web app project that shows off pokemons and their unique attributes.
+-   It was built using [Vue CLI v4.x](https://cli.vuejs.org/) for the front-end. It consumes the [PokeAPI v2](https://pokeapi.co/docs/v2).
+-   Git workflow used in this project was the [centralized](https://www.atlassian.com/git/tutorials/comparing-workflows) workflow.
+-   Project has not been tested in production, try it only in a dev enviroment.
+
+# Project setup
+
+## Run in root directory (/pokechallenge)
 
 ```
 npm install
 ```
 
-### Compiles and hot-reloads for development
+## Run the Vue dev server (http://localhost:8080)
 
 ```
 npm run serve
 ```
 
-### Compiles and minifies for production
+## Version
 
-```
-npm run build
-```
+1.0.0
 
-### Lints and fixes files
+## License
 
-```
-npm run lint
-```
-
-### Customize configuration
-
-See [Configuration Reference](https://cli.vuejs.org/config/).
+This project is licensed under the MIT License
