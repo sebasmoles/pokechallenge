@@ -4,7 +4,7 @@
 			class="filter"
 			type="text"
 			v-model="pokemonName"
-			placeholder="Search a pokemon"
+			:placeholder="placeholderMsg"
 			autocomplete="off"
 		/>
 		<button class="btn-filter" type="submit">
@@ -16,11 +16,29 @@
 <script>
 	export default {
 		name: "Filter",
+		props: {
+			language: {
+				type: String,
+				default: "en",
+			},
+		},
 		data() {
 			return {
 				pokemonName: "",
 			};
 		},
+		/*eslint-disable */
+		computed: {
+			placeholderMsg() {
+				if (this.language === "en") {
+					return "Search a pokemon";
+				}
+				if (this.language === "es") {
+					return "Busca un pokemon";
+				}
+			},
+		},
+		/*eslint-enable */
 		methods: {
 			onSubmit(e) {
 				e.preventDefault();

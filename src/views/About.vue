@@ -1,5 +1,5 @@
 <template>
-	<Pokemon :key="$route.params.name" />
+	<Pokemon :key="$route.params.name" :language="language" />
 </template>
 
 <script>
@@ -7,6 +7,12 @@
 
 	export default {
 		name: "About",
+		props: {
+			language: {
+				type: String,
+				default: "en",
+			},
+		},
 		components: {
 			Pokemon,
 		},

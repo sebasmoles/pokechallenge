@@ -1,5 +1,5 @@
 <template>
-	<p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
+	<p v-if="errorMessage" class="error-message">{{ serverErrorMsg }}</p>
 
 	<div v-if="!loading" class="pokemon-detail">
 		<div class="pokemon-detail-header">
@@ -11,7 +11,7 @@
 						:key="index"
 						:class="value.type.name"
 					>
-						{{ value.type.name }}
+						{{ setTypesLanguage(value.type.name) }}
 					</span>
 				</div>
 			</div>
@@ -35,9 +35,9 @@
 			<div class="pokemon-detail-description">
 				<div class="physics">
 					<div class="keys">
-						<span>XP</span>
-						<span>Height</span>
-						<span>Weight</span>
+						<span> {{ experienceKey }} </span>
+						<span> {{ heightKey }} </span>
+						<span> {{ weightKey }} </span>
 					</div>
 					<div class="values">
 						<span>{{ this.pokemon.base_experience }}</span>
@@ -47,7 +47,7 @@
 				</div>
 
 				<div class="abilities">
-					<span class="abilities-title">Abilities</span>
+					<span class="abilities-title"> {{ abilitiesKey }} </span>
 					<div class="abilities-content">
 						<span
 							v-for="(value, index) in this.pokemon.abilities"
@@ -77,6 +77,56 @@
 <script>
 	export default {
 		name: "Pokemon",
+		props: {
+			language: {
+				type: String,
+				default: "en",
+			},
+		},
+		/*eslint-disable */
+		computed: {
+			serverErrorMsg() {
+				if (this.language === "en") {
+					return "Pokemon not found, please try again.";
+				}
+				if (this.language === "es") {
+					return "El pokemon no ha sido encontrado, por favor intentalo de nuevo.";
+				}
+			},
+			experienceKey() {
+				if (this.language === "en") {
+					return "XP";
+				}
+				if (this.language === "es") {
+					return "Experiencia";
+				}
+			},
+			heightKey() {
+				if (this.language === "en") {
+					return "Height";
+				}
+				if (this.language === "es") {
+					return "Altura";
+				}
+			},
+			weightKey() {
+				if (this.language === "en") {
+					return "Weight";
+				}
+				if (this.language === "es") {
+					return "Peso";
+				}
+			},
+			abilitiesKey() {
+				if (this.language === "en") {
+					return "Abilities";
+				}
+				if (this.language === "es") {
+					return "Habilidades";
+				}
+			},
+		},
+		/*eslint-enable */
 		data() {
 			return {
 				name: this.$route.params.name,
@@ -94,7 +144,7 @@
 				);
 
 				if (res.status === 404) {
-					this.errorMessage = "Pokemon not found, try again.";
+					this.errorMessage = `Pokemon not found: ${res.status}`;
 					throw new Error(this.errorMessage);
 				}
 
@@ -107,6 +157,51 @@
 			},
 			togglePokemonImage() {
 				this.frontView = !this.frontView;
+			},
+			setTypesLanguage(type) {
+				if (this.language === "en") {
+					return type;
+				}
+				if (this.language === "es") {
+					switch (type) {
+						case "normal":
+							return "normal";
+						case "fighting":
+							return "lucha";
+						case "flying":
+							return "volador";
+						case "poison":
+							return "veneno";
+						case "ground":
+							return "tierra";
+						case "rock":
+							return "roca";
+						case "bug":
+							return "bicho";
+						case "ghost":
+							return "fantasma";
+						case "steel":
+							return "acero";
+						case "fire":
+							return "fuego";
+						case "water":
+							return "agua";
+						case "grass":
+							return "planta";
+						case "electric":
+							return "electrico";
+						case "psychic":
+							return "psiquico";
+						case "ice":
+							return "hielo";
+						case "dragon":
+							return "dragon";
+						case "dark":
+							return "siniestro";
+						case "fairy":
+							return "hada";
+					}
+				}
 			},
 		},
 		async created() {
@@ -306,5 +401,15 @@
 	}
 	.d-pad .fas {
 		font-size: 1.5rem;
+	}
+	/* Media queries and responsive design */
+	@media only screen and (max-width: 600px) {
+		.pokemon-detail-body {
+			margin-top: 2rem;
+			flex-direction: column-reverse;
+		}
+		.d-pad {
+			margin-bottom: 1rem;
+		}
 	}
 </style>

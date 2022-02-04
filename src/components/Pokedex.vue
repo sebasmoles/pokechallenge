@@ -1,5 +1,7 @@
 <template>
-	<span v-if="errorMessage" class="error-message"> {{ errorMessage }}</span>
+	<span v-if="errorMessage" class="error-message">
+		{{ serverErrorMsg }}
+	</span>
 
 	<main v-if="!loading" class="list">
 		<!-- Pokemon cardboxes -->
@@ -45,6 +47,24 @@
 <script>
 	export default {
 		name: "Pokedex",
+		props: {
+			language: {
+				type: String,
+				default: "en",
+			},
+		},
+		/*eslint-disable */
+		computed: {
+			serverErrorMsg() {
+				if (this.language === "en") {
+					return "Something went wrong with the server, please try again later.";
+				}
+				if (this.language === "es") {
+					return "Ha ocurrido un error en el servidor, por favor intentalo más tarde.";
+				}
+			},
+		},
+		/*eslint-enable */
 		data() {
 			return {
 				pokemons: [],
@@ -64,7 +84,7 @@
 			async fetchPokemons() {
 				const res = await fetch(this.url);
 				if (!res.ok) {
-					this.errorMessage = `Something went wrong with the server: ${res.status} ${res.statusText}. Try again later`;
+					this.errorMessage = `Something went wrong with the server: ${res.status}`;
 					throw new Error(this.errorMessage);
 				}
 				const data = await res.json();
@@ -79,7 +99,6 @@
 					this.prevUrl = data.previous;
 				}
 				this.pokemons = data.results;
-				this.areTherePokemons();
 				this.loading = false;
 			},
 			loadNext() {
@@ -89,11 +108,6 @@
 			loadPrev() {
 				this.url = this.prevUrl;
 				this.fetchPokemons();
-			},
-			areTherePokemons() {
-				if (this.pokemons.length === 0) {
-					this.errorMessage = "There are no pokemons to show.";
-				}
 			},
 		},
 		created() {

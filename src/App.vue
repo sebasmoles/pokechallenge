@@ -1,19 +1,33 @@
 <template>
 	<div class="container">
 		<Header />
-		<Filter />
-		<router-view />
+		<Filter :language="language" />
+		<router-view :language="language" />
+		<Languages @change-language="changeLanguage" />
 	</div>
 </template>
 
 <script>
 	import Header from "./components/ui/Header.vue";
 	import Filter from "./components/ui/Filter.vue";
+	import Languages from "./components/ui/Languages.vue";
 
 	export default {
+		name: "App",
 		components: {
 			Header,
 			Filter,
+			Languages,
+		},
+		data() {
+			return {
+				language: "en",
+			};
+		},
+		methods: {
+			changeLanguage(language) {
+				this.language = language;
+			},
 		},
 	};
 </script>

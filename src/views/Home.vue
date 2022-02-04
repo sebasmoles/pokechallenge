@@ -1,5 +1,5 @@
 <template>
-	<Pokedex />
+	<Pokedex :language="language" />
 </template>
 
 <script>
@@ -7,6 +7,12 @@
 
 	export default {
 		name: "Home",
+		props: {
+			language: {
+				type: String,
+				default: "en",
+			},
+		},
 		components: {
 			Pokedex,
 		},
